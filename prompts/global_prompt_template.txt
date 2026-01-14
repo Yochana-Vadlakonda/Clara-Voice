@@ -1,0 +1,11 @@
+### Context Awareness
+
+Current time ({{Time_Zone}}): {{current_time_America/{{Time_Place}}}}  
+14-day calendar: {{current_Calendar_America/{{Time_Place}}}}  
+Business hours: {{Business_Hours}}  
+Office address: {{Office_Address}}
+
+Instructions:
+- Always use the America/{{Time_Place}} timezone ({{Time_Zone}}) to interpret any date or time mentioned by the customer.
+- If the customer says things like "next Friday", "this weekend", "tomorrow", or "in the afternoon", use the calendar and time to determine the exact date and time they mean.
+- When confirming or suggesting appointments, clearly state the interpreted date — e.g., "You mean Friday, June 28th 2025, correct?"

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clara - Production Onboarding System</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .onboarding-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .submit-btn {
+            background: #007bff;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background: #0056b3;
+        }
+        
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .progress-container {
+            display: none;
+            margin-top: 2rem;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #007bff, #28a745);
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+        
+        .step-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .step-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .step-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 0.8rem;
+        }
+        
+        .step-pending {
+            background: #e9ecef;
+            color: #6c757d;
+        }
+        
+        .step-running {
+            background: #007bff;
+            color: white;
+        }
+        
+        .step-completed {
+            background: #28a745;
+            color: white;
+        }
+        
+        .step-failed {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .results-container {
+            display: none;
+            margin-top: 2rem;
+            padding: 2rem;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+        }
+        
+        .error-container {
+            display: none;
+            margin-top: 2rem;
+            padding: 2rem;
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 8px;
+        }
+        
+        .credential-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .copy-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .copy-btn:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <header class="clara-header">
+        <div class="clara-logo">
+            <img src="assets/clara_black.png" alt="Clara" class="logo-image">
+        </div>
+    </header>
+
+    <div class="onboarding-container">
+        <h1>Production Voice Agent Onboarding</h1>
+        <p>Complete the form below to set up your company's voice agent system.</p>
+
+        <form id="onboardingForm">
+            <!-- Company Information -->
+            <div class="form-section">
+                <h3>Company Information</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="company_name">Company Name *</label>
+                        <input type="text" id="company_name" name="company_name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="assistant_name">Assistant Name *</label>
+                        <input type="text" id="assistant_name" name="assistant_name" value="Clara" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="business_address">Business Address *</label>
+                    <textarea id="business_address" name="business_address" rows="3" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="website_url">Website URL (for knowledge base) *</label>
+                    <input type="url" id="website_url" name="website_url" placeholder="https://yourcompany.com" required>
+                </div>
+            </div>
+
+            <!-- Business Hours -->
+            <div class="form-section">
+                <h3>Business Hours & Contact</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="timezone">Timezone *</label>
+                        <select id="timezone" name="timezone" required>
+                            <option value="">Select Timezone</option>
+                            <option value="Eastern">Eastern Time</option>
+                            <option value="Central">Central Time</option>
+                            <option value="Mountain">Mountain Time</option>
+                            <option value="Pacific">Pacific Time</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="business_hours">Business Hours *</label>
+                        <input type="text" id="business_hours" name="business_hours" placeholder="9:00 AM - 5:00 PM" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="primary_phone_number">Primary Phone Number *</label>
+                    <input type="tel" id="primary_phone_number" name="primary_phone_number" placeholder="(555) 123-4567" required>
+                </div>
+            </div>
+
+            <!-- Phone Number Configuration -->
+            <div class="form-section">
+                <h3>Phone Number Setup</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="preferred_area_code">Preferred Area Code *</label>
+                        <input type="text" id="preferred_area_code" name="preferred_area_code" placeholder="212" maxlength="3" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="fallback_area_codes">Fallback Area Codes (comma-separated)</label>
+                        <input type="text" id="fallback_area_codes" name="fallback_area_codes" placeholder="415, 213, 312">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency Settings -->
+            <div class="form-section">
+                <h3>Emergency Settings</h3>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="allow_emergency_transfer" name="allow_emergency_transfer">
+                    <label for="allow_emergency_transfer">Allow Emergency Transfer</label>
+                </div>
+                
+                <div class="form-group">
+                    <label for="emergency_transfer_number">Emergency Transfer Number</label>
+                    <input type="tel" id="emergency_transfer_number" name="emergency_transfer_number" placeholder="(555) 911-0000">
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <i class="fas fa-rocket"></i>
+                Start Onboarding
+            </button>
+        </form>
+
+        <!-- Progress Container -->
+        <div class="progress-container" id="progressContainer">
+            <h3>Onboarding Progress</h3>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            
+            <div id="progressText">Initializing...</div>
+            
+            <ul class="step-list" id="stepList">
+                <li class="step-item">
+                    <div class="step-icon step-pending" id="step-validate_input">1</div>
+                    <div>Validate Input Data</div>
+                </li>
+                <li class="step-item">
+                    <div class="step-icon step-pending" id="step-create_company">2</div>
+                    <div>Create Company Record</div>
+                </li>
+                <li class="step-item">
+                    <div class="step-icon step-pending" id="step-create_knowledge_base">3</div>
+                    <div>Create Knowledge Base</div>
+                </li>
+                <li class="step-item">
+                    <div class="step-icon step-pending" id="step-generate_prompts">4</div>
+                    <div>Generate Voice Prompts</div>
+                </li>
+                <li class="step-item">
+                    <div class="step-icon step-pending" id="step-create_llms">5</div>
+                    <div>Create AI Models</div>
+                </li>
+                <li class="step-item">
+                    <div class="step-icon step-pending" id="step-create_agents">6</div>
+                    <div>Create Voice Agents</div>
+                </li>
+                <li class="step-item">
+                    <div class="step-icon step-pending" id="step-purchase_phone">7</div>
+                    <div>Purchase Phone Number</div>
+                </li>
+                <li class="step-item">
+                    <div class="step-icon step-pending" id="step-create_dashboard">8</div>
+                    <div>Create Dashboard Account</div>
+                </li>
+                <li class="step-item">
+                    <div class="step-icon step-pending" id="step-configure_voice">9</div>
+                    <div>Configure Voice Settings</div>
+                </li>
+                <li class="step-item">
+                    <div class="step-icon step-pending" id="step-finalize">10</div>
+                    <div>Finalize Setup</div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Results Container -->
+        <div class="results-container" id="resultsContainer">
+            <h3><i class="fas fa-check-circle"></i> Onboarding Complete!</h3>
+            <p>Your voice agent system has been successfully set up.</p>
+            
+            <div id="credentialsList">
+                <!-- Credentials will be populated here -->
+            </div>
+        </div>
+
+        <!-- Error Container -->
+        <div class="error-container" id="errorContainer">
+            <h3><i class="fas fa-exclamation-triangle"></i> Onboarding Failed</h3>
+            <p id="errorMessage">An error occurred during onboarding.</p>
+            
+            <button class="submit-btn" onclick="location.reload()">
+                <i class="fas fa-refresh"></i>
+                Try Again
+            </button>
+        </div>
+    </div>
+
+    <script>
+        class ProductionOnboarding {
+            constructor() {
+                this.sessionId = null;
+                this.pollInterval = null;
+                this.init();
+            }
+
+            init() {
+                document.getElementById('onboardingForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.startOnboarding();
+                });
+            }
+
+            async startOnboarding() {
+                const formData = new FormData(document.getElementById('onboardingForm'));
+                const data = {};
+                
+                // Convert form data to object
+                for (let [key, value] of formData.entries()) {
+                    if (key === 'fallback_area_codes' && value) {
+                        data[key] = value.split(',').map(code => code.trim()).filter(code => code);
+                    } else if (key === 'allow_emergency_transfer') {
+                        data[key] = true; // Checkbox is checked
+                    } else {
+                        data[key] = value;
+                    }
+                }
+                
+                // Set default for unchecked checkbox
+                if (!data.allow_emergency_transfer) {
+                    data.allow_emergency_transfer = false;
+                }
+
+                try {
+                    // Disable form and show progress
+                    document.getElementById('submitBtn').disabled = true;
+                    document.getElementById('progressContainer').style.display = 'block';
+
+                    // Start onboarding
+                    const response = await fetch('/api/onboard', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        this.sessionId = result.session_id;
+                        this.startPolling();
+                    } else {
+                        this.showError(result.error || 'Failed to start onboarding');
+                    }
+
+                } catch (error) {
+                    this.showError(`Network error: ${error.message}`);
+                }
+            }
+
+            startPolling() {
+                this.pollInterval = setInterval(() => {
+                    this.checkStatus();
+                }, 2000); // Poll every 2 seconds
+
+                // Initial status check
+                this.checkStatus();
+            }
+
+            async checkStatus() {
+                try {
+                    const response = await fetch(`/api/onboard/${this.sessionId}/status`);
+                    const status = await response.json();
+
+                    if (status.error) {
+                        this.showError(status.error);
+                        return;
+                    }
+
+                    // Update progress
+                    this.updateProgress(status);
+
+                    // Check if completed or failed
+                    if (status.status === 'completed') {
+                        clearInterval(this.pollInterval);
+                        this.showResults(status);
+                    } else if (status.status === 'failed') {
+                        clearInterval(this.pollInterval);
+                        this.showError(status.error_message || 'Onboarding failed');
+                    }
+
+                } catch (error) {
+                    console.error('Status check error:', error);
+                }
+            }
+
+            updateProgress(status) {
+                // Update progress bar
+                const progressFill = document.getElementById('progressFill');
+                progressFill.style.width = `${status.progress_percentage}%`;
+
+                // Update progress text
+                document.getElementById('progressText').textContent = 
+                    `Step ${status.completed_steps}/${status.total_steps}: ${status.current_step}`;
+
+                // Update step icons
+                if (status.audit_logs) {
+                    status.audit_logs.forEach(log => {
+                        const stepIcon = document.getElementById(`step-${log.step}`);
+                        if (stepIcon) {
+                            stepIcon.className = `step-icon step-${log.status}`;
+                            if (log.status === 'completed') {
+                                stepIcon.innerHTML = '<i class="fas fa-check"></i>';
+                            } else if (log.status === 'failed') {
+                                stepIcon.innerHTML = '<i class="fas fa-times"></i>';
+                            } else if (log.status === 'started') {
+                                stepIcon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                            }
+                        }
+                    });
+                }
+            }
+
+            showResults(status) {
+                document.getElementById('progressContainer').style.display = 'none';
+                document.getElementById('resultsContainer').style.display = 'block';
+
+                // Extract results from audit logs
+                const results = {};
+                if (status.audit_logs) {
+                    status.audit_logs.forEach(log => {
+                        if (log.status === 'completed' && log.output_data) {
+                            results[log.step] = log.output_data;
+                        }
+                    });
+                }
+
+                // Display credentials
+                const credentialsList = document.getElementById('credentialsList');
+                let credentialsHTML = '';
+
+                if (results.purchase_phone && results.purchase_phone.phone_number) {
+                    credentialsHTML += this.createCredentialItem('Phone Number', results.purchase_phone.phone_number);
+                }
+
+                if (results.create_dashboard) {
+                    credentialsHTML += this.createCredentialItem('Dashboard Email', results.create_dashboard.dashboard_email);
+                    credentialsHTML += this.createCredentialItem('Dashboard Password', results.create_dashboard.dashboard_password);
+                }
+
+                if (results.create_agents) {
+                    credentialsHTML += this.createCredentialItem('Main Agent ID', results.create_agents.main_router);
+                }
+
+                credentialsList.innerHTML = credentialsHTML;
+            }
+
+            createCredentialItem(label, value) {
+                return `
+                    <div class="credential-item">
+                        <div>
+                            <strong>${label}:</strong> ${value}
+                        </div>
+                        <button class="copy-btn" onclick="navigator.clipboard.writeText('${value}')">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                `;
+            }
+
+            showError(message) {
+                clearInterval(this.pollInterval);
+                document.getElementById('progressContainer').style.display = 'none';
+                document.getElementById('errorContainer').style.display = 'block';
+                document.getElementById('errorMessage').textContent = message;
+                document.getElementById('submitBtn').disabled = false;
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new ProductionOnboarding();
+        });
+    </script>
+</body>
+</html>

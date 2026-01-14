@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clara - AI Front Desk Assistant Setup</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Global Header with Clara Logo -->
+    <header class="clara-header">
+        <div class="clara-logo">
+            <img src="assets/clara_black.png" alt="Clara" class="logo-image">
+        </div>
+    </header>
+
+    <!-- Landing Page -->
+    <div id="landing-page" class="page active">
+        <div class="container">
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h1 class="hero-title">Let's Get Clara Ready for You</h1>
+                    <p class="hero-subtitle">Set up your AI front desk assistant in just a few simple steps.</p>
+                    <button class="cta-button primary" onclick="startOnboarding()">
+                        Get Started
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <p class="hero-note">No pressure. No complexity. Just a smooth setup.</p>
+                </div>
+                <div class="hero-visual">
+                    <div class="clara-avatar">
+                        <div class="avatar-circle">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <div class="pulse-ring"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Collection Page -->
+    <div id="details-page" class="page">
+        <div class="container-sidebar">
+            <!-- Sidebar Progress -->
+            <div class="sidebar-progress">
+                <div class="progress-step-vertical active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <span class="step-title">Company Info</span>
+                        <span class="step-description">Basic details</span>
+                    </div>
+                </div>
+                <div class="progress-step-vertical" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <span class="step-title">Business Details</span>
+                        <span class="step-description">Hours & contact</span>
+                    </div>
+                </div>
+                <div class="progress-step-vertical" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <span class="step-title">Post-Call Options</span>
+                        <span class="step-description">Email & SMS</span>
+                    </div>
+                </div>
+                <div class="progress-step-vertical" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <span class="step-title">Review</span>
+                        <span class="step-description">Confirm details</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="main-content">
+                <div class="form-container-sidebar">
+                    <div class="form-header-compact">
+                        <h2>Tell us about your business</h2>
+                        <p>We'll use this information to customize Clara for your needs.</p>
+                    </div>
+
+                    <form id="onboarding-form" class="onboarding-form">
+                        <!-- Section 1: Company Info -->
+                        <div class="form-section active" id="section-1">
+                            <div class="form-card">
+                                <div class="form-group">
+                                    <label for="companyName">Company Name *</label>
+                                    <input type="text" id="companyName" name="companyName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="officeAddress">Office Address *</label>
+                                    <input type="text" id="officeAddress" name="officeAddress" required>
+                                </div>
+                                
+                                <!-- Knowledge Base Section -->
+                                <div class="form-group">
+                                    <label for="knowledgeBaseWebsites">Knowledge Base Websites (Optional)</label>
+                                    <p class="field-description">Add up to 3 websites for Clara to learn from</p>
+                                    <div class="website-inputs" id="websiteInputs">
+                                        <div class="website-input-group">
+                                            <input type="url" class="website-input" placeholder="https://yourwebsite.com" data-index="0">
+                                            <button type="button" class="remove-website-btn" onclick="removeWebsite(0)" style="display: none;">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="add-website-btn" id="addWebsiteBtn" onclick="addWebsite()">
+                                        <i class="fas fa-plus"></i>
+                                        Add Website
+                                    </button>
+                                </div>
+                                
+                                <!-- Document Upload Section -->
+                                <div class="form-group">
+                                    <label for="documentUpload">Upload Documents (Optional)</label>
+                                    <p class="field-description">Upload Word documents (DOC/DOCX) up to 50MB</p>
+                                    <div class="file-upload-area" id="fileUploadArea">
+                                        <input type="file" id="documentUpload" name="documentUpload" accept=".doc,.docx" multiple style="display: none;">
+                                        <div class="upload-placeholder" onclick="document.getElementById('documentUpload').click()">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                            <p>Click to upload documents or drag & drop</p>
+                                            <span class="file-limit">Max 50MB per file</span>
+                                        </div>
+                                        <div class="uploaded-files" id="uploadedFiles"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Business Details -->
+                        <div class="form-section" id="section-2">
+                            <div class="form-card">
+                                <div class="form-group">
+                                    <label for="timeZone">Time Zone *</label>
+                                    <select id="timeZone" name="timeZone" required>
+                                        <option value="">Select your time zone</option>
+                                        <option value="Eastern">Eastern Time</option>
+                                        <option value="Central">Central Time</option>
+                                        <option value="Mountain">Mountain Time</option>
+                                        <option value="Pacific">Pacific Time</option>
+                                        <option value="Alaska">Alaska Time</option>
+                                        <option value="Hawaii">Hawaii Time</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Business Hours Section -->
+                                <div class="form-group">
+                                    <label>Business Hours *</label>
+                                    <p class="field-description">Select your operating days and hours</p>
+                                    <div class="business-hours-container">
+                                        <div class="days-selection">
+                                            <label class="day-checkbox">
+                                                <input type="checkbox" name="businessDays" value="monday" checked>
+                                                <span>Mon</span>
+                                            </label>
+                                            <label class="day-checkbox">
+                                                <input type="checkbox" name="businessDays" value="tuesday" checked>
+                                                <span>Tue</span>
+                                            </label>
+                                            <label class="day-checkbox">
+                                                <input type="checkbox" name="businessDays" value="wednesday" checked>
+                                                <span>Wed</span>
+                                            </label>
+                                            <label class="day-checkbox">
+                                                <input type="checkbox" name="businessDays" value="thursday" checked>
+                                                <span>Thu</span>
+                                            </label>
+                                            <label class="day-checkbox">
+                                                <input type="checkbox" name="businessDays" value="friday" checked>
+                                                <span>Fri</span>
+                                            </label>
+                                            <label class="day-checkbox">
+                                                <input type="checkbox" name="businessDays" value="saturday">
+                                                <span>Sat</span>
+                                            </label>
+                                            <label class="day-checkbox">
+                                                <input type="checkbox" name="businessDays" value="sunday">
+                                                <span>Sun</span>
+                                            </label>
+                                        </div>
+                                        <div class="time-selection">
+                                            <div class="time-input-group">
+                                                <label for="startTime">Start Time</label>
+                                                <input type="time" id="startTime" name="startTime" value="09:00" required>
+                                            </div>
+                                            <div class="time-input-group">
+                                                <label for="endTime">End Time</label>
+                                                <input type="time" id="endTime" name="endTime" value="17:00" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="contactNumber">Contact Number (US/Canada format) *</label>
+                                    <input type="tel" id="contactNumber" name="contactNumber" placeholder="e.g., (555) 123-4567" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="assistantName">Assistant Name</label>
+                                    <input type="text" id="assistantName" name="assistantName" placeholder="Clara" value="Clara">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Post-Call Summary Options -->
+                        <div class="form-section" id="section-3">
+                            <div class="form-card">
+                                <h3>📋 Post-Call Summary Options</h3>
+                                <p class="section-description">Choose how you'd like to receive call summaries (enabled by default)</p>
+                                
+                                <!-- Email Summary Section -->
+                                <div class="form-group">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="postCallSummaryEmail" name="postCallSummaryEmail" checked>
+                                        <label for="postCallSummaryEmail">Receive post-call summaries via Email</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group conditional-field active" id="emailSummaryGroup">
+                                    <label for="primaryEmail">Primary Email Address *</label>
+                                    <input type="email" id="primaryEmail" name="primaryEmail" placeholder="your@email.com" required>
+                                    
+                                    <div class="cc-emails-section">
+                                        <label>CC Email Addresses (Optional)</label>
+                                        <div class="cc-emails-container" id="ccEmailsContainer">
+                                            <!-- CC emails will be added dynamically -->
+                                        </div>
+                                        <button type="button" class="add-cc-btn" onclick="addCCEmail()">
+                                            <i class="fas fa-plus"></i>
+                                            Add CC Email
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- SMS Summary Section -->
+                                <div class="form-group">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="postCallSummarySMS" name="postCallSummarySMS" checked>
+                                        <label for="postCallSummarySMS">Receive post-call summaries via SMS</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group conditional-field active" id="smsSummaryGroup">
+                                    <div class="sms-numbers-container" id="smsNumbersContainer">
+                                        <div class="sms-input-group">
+                                            <label for="primarySmsNumber">SMS Number (FREE) *</label>
+                                            <input type="tel" class="sms-input" id="primarySmsNumber" placeholder="e.g., (555) 123-4567" required>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="add-sms-btn" onclick="addSMSNumber()">
+                                        <i class="fas fa-plus"></i>
+                                        Add SMS Number
+                                    </button>
+                                    <div class="sms-pricing-note" id="smsPricingNote" style="display: none;">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span>Only one number is free. Additional numbers may be charged.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-navigation">
+                            <button type="button" class="nav-button secondary" id="prev-btn" onclick="previousSection()" style="display: none;">
+                                <i class="fas fa-arrow-left"></i>
+                                Previous
+                            </button>
+                            <button type="button" class="nav-button primary" id="next-btn" onclick="nextSection()">
+                                Next
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Page -->
+    <div id="review-page" class="page">
+        <div class="container-sidebar">
+            <!-- Sidebar Progress -->
+            <div class="sidebar-progress">
+                <div class="progress-step-vertical completed" data-step="1">
+                    <div class="step-number"><i class="fas fa-check"></i></div>
+                    <div class="step-content">
+                        <span class="step-title">Company Info</span>
+                        <span class="step-description">Basic details</span>
+                    </div>
+                </div>
+                <div class="progress-step-vertical completed" data-step="2">
+                    <div class="step-number"><i class="fas fa-check"></i></div>
+                    <div class="step-content">
+                        <span class="step-title">Business Details</span>
+                        <span class="step-description">Hours & contact</span>
+                    </div>
+                </div>
+                <div class="progress-step-vertical completed" data-step="3">
+                    <div class="step-number"><i class="fas fa-check"></i></div>
+                    <div class="step-content">
+                        <span class="step-title">Post-Call Options</span>
+                        <span class="step-description">Email & SMS</span>
+                    </div>
+                </div>
+                <div class="progress-step-vertical active" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <span class="step-title">Review</span>
+                        <span class="step-description">Confirm details</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="main-content">
+                <div class="form-container-sidebar">
+                    <div class="form-header-compact">
+                        <h2>Review Your Details</h2>
+                        <p>Please review all information before we create your Clara assistant.</p>
+                    </div>
+
+                    <div class="review-card">
+                        <h3>Company Information</h3>
+                        <div class="review-grid">
+                            <div class="review-item">
+                                <label>Company Name</label>
+                                <span id="review-company"></span>
+                            </div>
+                            <div class="review-item">
+                                <label>Office Address</label>
+                                <span id="review-address"></span>
+                            </div>
+                            <div class="review-item">
+                                <label>Knowledge Base Websites</label>
+                                <span id="review-websites"></span>
+                            </div>
+                            <div class="review-item">
+                                <label>Uploaded Documents</label>
+                                <span id="review-documents"></span>
+                            </div>
+                            <div class="review-item">
+                                <label>Assistant Name</label>
+                                <span id="review-assistant"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="review-card">
+                        <h3>Business Details</h3>
+                        <div class="review-grid">
+                            <div class="review-item">
+                                <label>Time Zone</label>
+                                <span id="review-timezone"></span>
+                            </div>
+                            <div class="review-item">
+                                <label>Business Days</label>
+                                <span id="review-business-days"></span>
+                            </div>
+                            <div class="review-item">
+                                <label>Business Hours</label>
+                                <span id="review-hours"></span>
+                            </div>
+                            <div class="review-item">
+                                <label>Contact Number</label>
+                                <span id="review-phone"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="review-card">
+                        <h3>Post-Call Summary Options</h3>
+                        <div class="review-grid">
+                            <div class="review-item">
+                                <label>Email Summaries</label>
+                                <span id="review-email-enabled"></span>
+                            </div>
+                            <div class="review-item conditional-review" id="review-primary-email-item">
+                                <label>Primary Email</label>
+                                <span id="review-primary-email"></span>
+                            </div>
+                            <div class="review-item conditional-review" id="review-cc-emails-item" style="display: none;">
+                                <label>CC Emails</label>
+                                <span id="review-cc-emails"></span>
+                            </div>
+                            <div class="review-item">
+                                <label>SMS Summaries</label>
+                                <span id="review-sms-enabled"></span>
+                            </div>
+                            <div class="review-item conditional-review" id="review-sms-numbers-item">
+                                <label>SMS Numbers</label>
+                                <span id="review-sms-numbers"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-navigation">
+                        <button type="button" class="nav-button secondary" onclick="goToDetails()">
+                            <i class="fas fa-edit"></i>
+                            Edit Details
+                        </button>
+                        <button type="button" class="nav-button primary" onclick="confirmDetails()">
+                            Confirm Details
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Page -->
+    <div id="loading-page" class="page">
+        <div class="container">
+            <div class="loading-container">
+                <div class="loading-animation">
+                    <div class="clara-spinner">
+                        <div class="spinner-ring"></div>
+                        <div class="spinner-ring"></div>
+                        <div class="spinner-ring"></div>
+                    </div>
+                </div>
+                
+                <div class="loading-content">
+                    <h2>Setting up your Clara assistant...</h2>
+                    <p class="loading-warning">This might take a few minutes. Please don't close this tab!</p>
+                    
+                    <div class="funny-quotes">
+                        <p class="quote active" id="quote-1">"Clara is getting her virtual coffee ready... ☕ She's about to become your best front desk assistant!"</p>
+                        <p class="quote" id="quote-2">"Fun fact: Clara never calls in sick, never takes lunch breaks, and always answers with a smile! 😊"</p>
+                        <p class="quote" id="quote-3">"We're teaching Clara your business so well, she might know it better than you do! 🤓"</p>
+                        <p class="quote" id="quote-4">"Clara is practicing her 'professional voice' - she's almost ready to impress your callers! 🎭"</p>
+                        <p class="quote" id="quote-5">"Did you know? Clara can handle multiple calls simultaneously without breaking a sweat! 💪"</p>
+                        <p class="quote" id="quote-6">"Clara is learning your website faster than a speed reader on espresso! 📚⚡"</p>
+                        <p class="quote" id="quote-7">"Almost there! Clara is putting on her customer service cape... 🦸‍♀️"</p>
+                        <p class="quote" id="quote-8">"Clara promises to be more reliable than your morning alarm clock! ⏰"</p>
+                        <p class="quote" id="quote-9">"Final touches! Clara is rehearsing her 'How may I help you?' - it's going to be perfect! ✨"</p>
+                    </div>
+                    
+                    <div class="loading-progress">
+                        <div class="progress-bar-loading">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <p class="progress-text">Creating your AI assistant...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Page -->
+    <div id="success-page" class="page">
+        <div class="container">
+            <div class="success-container-minimal">
+                <div class="success-header-minimal">
+                    <div class="success-checkmark">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h2>Let's Go! Your Agent is Ready! 🚀</h2>
+                    <p>Clara is all set up and ready to handle your calls professionally.</p>
+                </div>
+                
+                <!-- Primary Action Buttons - Prominent Position -->
+                <div class="primary-actions">
+                    <a href="https://voice.justclara.ai" class="primary-action-btn dashboard-btn" target="_blank">
+                        <div class="action-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <div class="action-content">
+                            <h3>Access Dashboard</h3>
+                            <p>Monitor calls & analytics</p>
+                        </div>
+                        <i class="fas fa-external-link-alt action-arrow"></i>
+                    </a>
+                    
+                    <button class="primary-action-btn call-btn" onclick="testCall()">
+                        <div class="action-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="action-content">
+                            <h3>Call Clara</h3>
+                            <p>Test your setup now</p>
+                        </div>
+                        <i class="fas fa-arrow-right action-arrow"></i>
+                    </button>
+                </div>
+                
+                <!-- Credentials Section - Compact -->
+                <div class="credentials-section-minimal">
+                    <h4>Your Clara Details</h4>
+                    <div class="credential-row">
+                        <div class="credential-label">
+                            <i class="fas fa-phone"></i>
+                            Clara Number
+                        </div>
+                        <div class="credential-value-container">
+                            <span class="credential-value" id="clara-phone">+1 (555) 123-4567</span>
+                            <button class="copy-btn-minimal" onclick="copyToClipboard('clara-phone')" title="Copy">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="credential-row">
+                        <div class="credential-label">
+                            <i class="fas fa-user"></i>
+                            Dashboard Login
+                        </div>
+                        <div class="credential-value-container">
+                            <span class="credential-value" id="dashboard-email">support@company.justclara.ai</span>
+                            <button class="copy-btn-minimal" onclick="copyToClipboard('dashboard-email')" title="Copy">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="credential-row">
+                        <div class="credential-label">
+                            <i class="fas fa-key"></i>
+                            Password
+                        </div>
+                        <div class="credential-value-container">
+                            <span class="credential-value" id="dashboard-password">company@321</span>
+                            <button class="copy-btn-minimal" onclick="copyToClipboard('dashboard-password')" title="Copy">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact Assignment Notice - Compact -->
+                <div class="contact-notice-minimal">
+                    <div class="notice-content">
+                        <h4>What's Next?</h4>
+                        <p><strong>Your point of contact will be updated at the earliest.</strong> In the meantime, you can test the setup. Once assigned, they will help you forward calls to Clara.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Us Floating Button -->
+    <div class="contact-us-float" onclick="openContactModal()">
+        <i class="fas fa-headset"></i>
+        <span>Contact Us</span>
+    </div>
+
+    <!-- Contact Us Modal -->
+    <div class="contact-modal" id="contactModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Contact Our Support Team</h3>
+                <button class="close-modal" onclick="closeContactModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="contact-option">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h4>Call Us</h4>
+                        <p>(206) 307-0899</p>
+                        <a href="tel:+12063070899" class="contact-action-btn">Call Now</a>
+                    </div>
+                </div>
+                <div class="contact-option">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h4>Email Us</h4>
+                        <p>info@justclara.ai</p>
+                        <a href="mailto:info@justclara.ai" class="contact-action-btn">Send Email</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Backdrop -->
+    <div class="modal-backdrop" id="modalBackdrop" onclick="closeContactModal()"></div>
+
+    <script src="src/main.js"></script>
+</body>
+</html>
